@@ -1,5 +1,7 @@
 """CLI principal para ReverseShell-Generator."""
 
+from pathlib import Path
+
 import click
 
 from ..core.scope import ScopeManager
@@ -83,7 +85,6 @@ def bind(language: str, port: int, encode: str | None, output: str | None) -> No
     click.echo(payload)
 
     if output:
-        from pathlib import Path
         Path(output).write_text(payload, encoding="utf-8")
         click.echo(f"\nGuardado en: {output}")
 
