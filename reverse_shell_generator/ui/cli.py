@@ -41,8 +41,12 @@ def list() -> None:
 @click.option("--port", default=4444, type=int, help="Puerto del listener")
 @click.option("--encode", default=None, type=click.Choice(["base64", "hex", "rot13", "xor"]), help="Codificar payload")
 @click.option("--output", default=None, help="Guardar payload en archivo")
-def generate(language: str, lhost: str, port: int, encode: str | None, output: str | None) -> None:
+@click.option("--scope", default="scope.json", help="Ruta al archivo scope.json")
+def generate(language: str, lhost: str, port: int, encode: str | None, output: str | None, scope: str) -> None:
     """Genera un reverse shell para el lenguaje indicado."""
+    scope_mgr = ScopeManager(scope)
+    scope_mgr.require_authorization()
+
     gen = ReverseShellGenerator()
     shell = gen.generate(language, lhost, port)
 
@@ -69,8 +73,12 @@ def generate(language: str, lhost: str, port: int, encode: str | None, output: s
 @click.option("--port", default=4444, type=int, help="Puerto de escucha")
 @click.option("--encode", default=None, type=click.Choice(["base64", "hex", "rot13", "xor"]), help="Codificar payload")
 @click.option("--output", default=None, help="Guardar payload en archivo")
-def bind(language: str, port: int, encode: str | None, output: str | None) -> None:
+@click.option("--scope", default="scope.json", help="Ruta al archivo scope.json")
+def bind(language: str, port: int, encode: str | None, output: str | None, scope: str) -> None:
     """Genera un bind shell para el lenguaje indicado."""
+    scope_mgr = ScopeManager(scope)
+    scope_mgr.require_authorization()
+
     gen = BindShellGenerator()
     shell = gen.generate(language, port)
 
